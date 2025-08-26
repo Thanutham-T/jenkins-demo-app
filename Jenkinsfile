@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/<username>/jenkins-demo-app.git'
+                git branch: 'main', url: 'https://github.com/Thanutham-T/jenkins-demo-app'
             }
         }
         stage('Build Image') {
