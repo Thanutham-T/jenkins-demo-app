@@ -1,0 +1,24 @@
+FROM openjdk:17-jdk-slim
+
+# Install curl and docker client
+RUN apt-get update && apt-get install -y curl docker.io \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Environment variables
+ENV JENKINS_URL=http://host.docker.internal:8080
+ENV AGENT_NAME=dockerAgent
+ENV AGENT_SECRET=840639304a31c6211a75de0c4f89836c15f1e7b25467fbd5faca26445d69ffa2
+ENV AGENT_WORKDIR=/home/jenkins/agent
+
+# Create work directory
+RUN mkdir -p $AGENT_WORKDIR
+WORKDIR $AGENT_WORKDIR
+
+# Download agent.jar
+RUN curl -sO $JENKINS_URL/jnlpJars/agent.jar
+
+# Expose workdir as volume
+VOLUME ["/home/jenkins/agent"]
+
+# Run agent 
+CMD ["java", "-jar", "agent.jar", "-url", "http://host.docker.internal:8080/", "-secret", "840639304a31c6211a75de0c4f89836c15f1e7b25467fbd5faca26445d69ffa2", "-name", "dockerAgent", "-webSocket", "-workDir", "/home/jenkins/agent"]
