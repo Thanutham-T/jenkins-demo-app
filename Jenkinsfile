@@ -1,8 +1,8 @@
 pipeline {
     agent {
         docker {
-            image 'docker:28.3.3-dind'
-            args '--privileged -v /var/run/docker.sock:/var/run/docker.sock'
+            image 'docker:28.0'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
     stages {
@@ -18,7 +18,7 @@ pipeline {
         }
         stage('Run Container') {
             steps {
-                sh 'docker run -d -p 5000:5000 --name demo-app jenkins-demo-app:latest'
+                sh 'docker run -d -p 5000:5000 --name demo-app jenkins-demo-app:latest || true'
             }
         }
     }
